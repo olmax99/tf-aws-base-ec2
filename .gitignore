@@ -1,0 +1,7 @@
+.terraform.lock.hcl
+.terraform/
+
+**/magefiles
+**/mage
+/go.mod
+/go.sum
