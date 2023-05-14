@@ -1,47 +1,29 @@
-output "ec2-public-id" {
-  value = [for k,v in module.ec2_public: format("%s: %s", k, v.id)]
+output "ec2-public-all" {
+  value = module.ec2_public
 }
 
-output "ec2-private-id" {
-  value = [for k,v in module.ec2_private: format("%s: %s", k, v.id)]
-}
-
-output "ec2-public-arn" {
-  value = [for k,v in module.ec2_public: format("%s: %s", k, v.arn)]
-}
-
-output "ec2-private-arn" {
-  value = [for k,v in module.ec2_private: format("%s: %s", k, v.arn)]
+output "ec2-private-all" {
+  value = module.ec2_private
 }
 
 output "ec2-public-private-ip" {
-  value = [for k,v in module.ec2_public: format("%s: %s", k, v.private_ip)]
-}
-
-output "ec2-private-private-ip" {
-  value = [for k,v in module.ec2_private: format("%s: %s", k, v.private_ip)]
+  value = zipmap([for k, v in module.ec2_public : format("%s", k)], [for k, v in module.ec2_public : v.private_ip])
 }
 
 output "ec2-public-public-ip" {
-  value = [for k,v in module.ec2_public: format("%s: %s", k, v.public_ip)]
+  value = zipmap([for k, v in module.ec2_public : format("%s", k)], [for k, v in module.ec2_public : v.public_ip])
 }
 
-output "ec2-public-private-dns" {
-  value = [for k,v in module.ec2_public: format("%s: %s", k, v.private_dns)]
+// user_data needs to be set individually
+output "cloudinit_cloud_config" {
+  description = "Content of the cloud-init config to be deployed to a server."
+  value       = data.cloudinit_config.config.rendered
 }
 
-output "ec2-private-private-dns" {
-  value = [for k,v in module.ec2_private: format("%s: %s", k, v.private_dns)]
+output "cloudinit_environment_variables" {
+  value = local.environment
 }
 
-output "ec2-public-public-dns" {
-  value = [for k,v in module.ec2_public: format("%s: %s", k, v.public_dns)]
-}
-
-output "ec2-public-ami" {
-  value = [for k,v in module.ec2_public: format("%s: %s", k, v.ami)]
-}
-
-output "ec2-private-ami" {
-  value = [for k,v in module.ec2_private: format("%s: %s", k, v.ami)]
+output "cloudinit_included_files" {
+  value = toset([for f in local.cloudinit_files : f.filename])
 }

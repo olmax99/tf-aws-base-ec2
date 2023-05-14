@@ -37,7 +37,7 @@ module "ec2_public" {
   vpc_security_group_ids      = local.public_add[index(keys(var.instances_public), each.key)].vpc_security_group_ids
   associate_public_ip_address = local.public_add[index(keys(var.instances_public), each.key)].associate_public_ip_address
 
-  user_data_base64            = base64encode(each.value.user_data)
+  user_data_base64            = base64encode(local.public_add[index(keys(var.instances_public), each.key)].user_data)
   user_data_replace_on_change = local.public_add[index(keys(var.instances_public), each.key)].user_data_replace_on_change
 
   tags = merge(local.tags, each.value.tags)
@@ -62,7 +62,7 @@ module "ec2_private" {
   vpc_security_group_ids      = local.private_add[index(keys(var.instances_private), each.key)].vpc_security_group_ids
   associate_public_ip_address = false
 
-  user_data_base64            = base64encode(each.value.user_data)
+  user_data_base64            = base64encode(local.private_add[index(keys(var.instances_private), each.key)].user_data)
   user_data_replace_on_change = local.private_add[index(keys(var.instances_private), each.key)].user_data_replace_on_change
 
   tags = merge(local.tags, each.value.tags)

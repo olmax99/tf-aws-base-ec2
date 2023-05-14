@@ -1,0 +1,12 @@
+#cloud-config
+
+write_files:
+  %{~ for f in files ~}
+  - path: /var/cloudinit/${f.filename}
+    permissions: %{ if substr(f.filename, -2, 2) == "sh"}0755%{else}0644%{endif}
+    content: ${f.content}
+    encoding: b64
+  %{~ endfor ~}
+
+runcmd:
+  - echo "Hello Terraform!"

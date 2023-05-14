@@ -2,7 +2,7 @@ module "security_group_public" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 4.0"
 
-  name        = "${local.name}-sg0-${random_string.name.result}"
+  name        = "${local.name}-pub-sg-${random_string.name.result}"
   description = "Initial security group for external access to ec2 instances"
   vpc_id      = data.terraform_remote_state.vpc.outputs.vpc_id
 
@@ -42,7 +42,7 @@ module "security_group_private" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 4.0"
 
-  name        = "${local.name}-sg1-${random_string.name.result}"
+  name        = "${local.name}-priv-sg-${random_string.name.result}"
   description = "Initial security group for internal access to ec2 instances"
   vpc_id      = data.terraform_remote_state.vpc.outputs.vpc_id
 
